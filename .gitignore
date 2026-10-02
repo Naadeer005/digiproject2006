@@ -1,0 +1,15 @@
+build/
+db/
+incremental_db/
+output_files/
+*.qws
+*.qdf
+*.rpt
+*.summary
+*.smsg
+*.jdi
+*.wlf
+transcript
+work/
+modelsim.ini
+*.bak

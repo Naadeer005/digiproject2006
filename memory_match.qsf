@@ -1,0 +1,24 @@
+set_global_assignment -name FAMILY "MAX 10"
+set_global_assignment -name DEVICE 10M50DAF484C7G
+set_global_assignment -name TOP_LEVEL_ENTITY top
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name VHDL_INPUT_VERSION VHDL_2008
+set_global_assignment -name NUM_PARALLEL_PROCESSORS 4
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
+set_global_assignment -name VHDL_FILE rtl/game_pkg.vhd
+set_global_assignment -name VHDL_FILE rtl/font_pkg.vhd
+set_global_assignment -name VHDL_FILE rtl/input_controller.vhd
+set_global_assignment -name VHDL_FILE rtl/game_core.vhd
+set_global_assignment -name VHDL_FILE rtl/vga_timing.vhd
+set_global_assignment -name VHDL_FILE rtl/frame_snapshot.vhd
+set_global_assignment -name VHDL_FILE rtl/renderer.vhd
+set_global_assignment -name VHDL_FILE rtl/top.vhd
+set_global_assignment -name SDC_FILE constraints/memory_match.sdc
+source constraints/de10_lite_pins.tcl
+
+set_global_assignment -name LAST_QUARTUS_VERSION "25.1std.0 Lite Edition"
+set_global_assignment -name RESERVE_ALL_UNUSED_PINS_NO_OUTPUT_GND "AS INPUT TRI-STATED"
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
