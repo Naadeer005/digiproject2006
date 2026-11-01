@@ -6,9 +6,9 @@
 
 - Full compilation สำเร็จ สร้าง `output_files/memory_match.sof`
 - Timing ผ่านทุก model ที่ตรวจ ไม่มี Critical Warning และไม่มี timing violation
-- Slow 1200mV 85°C: Fmax **50.90 MHz**; slow 0°C: **56.03 MHz**
-- Worst setup slack **+0.353 ns**; worst hold slack **+0.148 ns**
-- ใช้ **2,842 / 49,760 logic elements (6%)**, 416 registers, 27 pins
+- Slow 1200mV 85°C: Fmax **51.41 MHz**; slow 0°C: **56.47 MHz**
+- Worst setup slack **+0.547 ns**; worst hold slack **+0.149 ns**
+- ใช้ **2,847 / 49,760 logic elements (6%)**, 416 registers, 27 pins
 - ไม่ใช้ block RAM, DSP multiplier หรือ PLL
 - รายงาน unconstrained paths เป็นศูนย์ทั้ง setup และ hold
 - เทียบขาที่ fitter ใช้ทั้ง 27 ขากับ Golden Top ของ DE10-Lite แล้วตรงกันทั้งหมด
