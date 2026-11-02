@@ -112,6 +112,8 @@ begin
               v.two_players <= mode_sync;
             end if;
         end case;
+        -- After the case so INITIAL_VIEW loads above cannot hide the switch.
+        v.reverse <= reverse_sync;
       end if;
     end if;
   end process;

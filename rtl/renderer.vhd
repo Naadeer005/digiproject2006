@@ -18,7 +18,6 @@ architecture rtl of renderer is
   type palette_t is array(0 to 7) of rgb_t;
   constant PALETTE : palette_t := (x"B34", x"276", x"258", x"735", x"853", x"368", x"647", x"567");
   constant TITLE : string := "MEMORY MATCH";
-  constant CONTROLS : string := "KEY0 NEXT  KEY1 OPEN  SW8 DIR  SW9 RESET";
   signal glyph_d, glyph_q : character := ' ';
   signal gx_d, gx_q, gy_d, gy_q : natural range 0 to 7 := 0;
   signal color_d, color_q, ink_d, ink_q : rgb_t := x"000";
@@ -58,6 +57,7 @@ begin
     variable hud : string(1 to 48);
     variable footer : string(1 to 48);
     variable status : string(1 to 24);
+    variable controls : string(1 to 41);
   begin
     color := x"112"; ink := x"FFF"; glyph := ' '; gx := 0; gy := 0;
     -- Decode fixed 12-pixel text cells with comparisons, not signed division
@@ -80,6 +80,9 @@ begin
     elsif y >= 432 and y < 446 then gy := (y-432)/2;
     elsif y >= 458 and y < 472 then gy := (y-458)/2; end if;
     hud := (others => ' '); footer := (others => ' '); status := (others => ' ');
+    -- Fixed width so SW9 RESET does not shift when SW8 flips.
+    if game.reverse = '1' then controls := "KEY0 NEXT  KEY1 OPEN  SW8 DOWN  SW9 RESET";
+    else controls := "KEY0 NEXT  KEY1 OPEN  SW8 UP    SW9 RESET"; end if;
     hud(1 to 5) := "MODE ";
     if game.two_players = '1' then hud(6) := '2'; else hud(6) := '1'; end if;
     hud(10 to 12) := "P1:"; hud(13) := digit(game.score1);
@@ -137,8 +140,8 @@ begin
       glyph := hud(text_col+1); gx := text_x;
     elsif y >= 432 and y < 446 and x >= 32 and x < 608 then
       glyph := footer(text_col+1); gx := text_x;
-    elsif y >= 458 and y < 472 and x >= 32 and x < 32+CONTROLS'length*12 then
-      glyph := CONTROLS(text_col+1); gx := text_x; ink := x"9AB";
+    elsif y >= 458 and y < 472 and x >= 32 and x < 32+controls'length*12 then
+      glyph := controls(text_col+1); gx := text_x; ink := x"9AB";
     end if;
     glyph_d <= glyph; gx_d <= gx; gy_d <= gy;
     color_d <= color; ink_d <= ink;

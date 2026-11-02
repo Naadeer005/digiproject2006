@@ -13,12 +13,13 @@ package game_pkg is
     matched : std_logic_vector(15 downto 0);
     cursor, first_card, second_card : position_t;
     two_players, player : std_logic;
+    reverse : std_logic;  -- live SW8, shown on screen
     score1, score2, pairs : natural range 0 to 8;
     attempts : natural range 0 to 999;
   end record;
   constant INITIAL_DECK : deck_t := (0,1,2,3,4,5,6,7,0,1,2,3,4,5,6,7);
   constant INITIAL_VIEW : view_t := (
-    READY, INITIAL_DECK, (others => '0'), 0, 0, 0, '0', '0', 0, 0, 0, 0);
+    READY, INITIAL_DECK, (others => '0'), 0, 0, 0, '0', '0', '0', 0, 0, 0, 0);
   subtype rgb_t is std_logic_vector(11 downto 0);
   function face_up(v : view_t; i : position_t) return boolean;
   function digit(n : natural) return character;

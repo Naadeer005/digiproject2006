@@ -114,13 +114,13 @@ begin
     -- SW8 reverses KEY0: 0 wraps to 15, then steps down to 14.
     reverse <= '1';
     move_key <= '1'; tick; move_key <= '0'; tick;
-    assert g.cursor = 15 report "Reverse cursor did not wrap" severity failure;
+    assert g.cursor = 15 and g.reverse = '1' report "Reverse cursor did not wrap" severity failure;
     move_key <= '1'; tick; move_key <= '0'; tick;
     assert g.cursor = 14 report "Reverse cursor did not step left" severity failure;
     reverse <= '0';
     move_key <= '1'; tick; move_key <= '0'; tick;
     move_key <= '1'; tick; move_key <= '0'; tick;
-    assert g.cursor = 0 report "Forward cursor did not resume" severity failure;
+    assert g.cursor = 0 and g.reverse = '0' report "Forward cursor did not resume" severity failure;
     move_key <= '1'; open_key <= '1'; tick; move_key <= '0'; open_key <= '0'; tick;
     assert g.state = PICK_SECOND and g.first_card = 0 and g.cursor = 0
       report "Open did not take priority" severity failure;
