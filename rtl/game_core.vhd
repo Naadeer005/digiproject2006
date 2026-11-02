@@ -106,7 +106,11 @@ begin
               v.state <= PICK_FIRST;
             end if;
           when GAME_OVER =>
-            if open_press = '1' then v.state <= READY; end if;
+            -- Clear the finished board so the title screen matches a fresh reset.
+            if open_press = '1' then
+              v <= INITIAL_VIEW;
+              v.two_players <= mode_sync;
+            end if;
         end case;
       end if;
     end if;

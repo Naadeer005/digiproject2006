@@ -151,6 +151,8 @@ begin
       report "Final pair/score wrong" severity failure;
     tick(5); assert g.score1 = 8 severity failure;
     press; assert g.state = READY report "Replay did not return to READY" severity failure;
+    assert g.matched = x"0000" and g.pairs = 0 and g.score1 = 0 and g.attempts = 0
+      report "Replay left the finished board on the title screen" severity failure;
 
     start_game('1');
     for id in 0 to 3 loop win_pair(id); end loop;

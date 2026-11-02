@@ -88,7 +88,7 @@ begin
       hud(24 to 29) := "TURN P";
       if game.player = '0' then hud(30) := '1'; else hud(30) := '2'; end if;
     end if;
-    hud(35 to 40) := "PAIRS:"; hud(41) := digit(game.pairs); hud(42 to 43) := "-8";
+    hud(35 to 40) := "PAIRS:"; hud(41) := digit(game.pairs); hud(42 to 43) := "/8";
     footer(1 to 9) := "ATTEMPTS ";
     footer(10) := digit(hundreds);
     footer(11) := digit(tens);
