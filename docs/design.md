@@ -9,7 +9,7 @@
 ```mermaid
 flowchart LR
   KEY[KEY0 / KEY1 active-low] --> INPUT[input_controller\nSynchronize + debounce + pulse]
-  SW[SW0 mode / SW9 reset] --> INPUT
+  SW[SW0 mode / SW8 direction / SW9 reset] --> INPUT
   INPUT --> CORE[game_core\n7-state FSM + deck + scores]
   CLOCK[50 MHz oscillator] --> INPUT
   CLOCK --> CORE
@@ -55,7 +55,7 @@ SW9 มีลำดับสูงกว่าการเปลี่ยนส�
 | PICK_FIRST | KEY1 บนใบที่ยังไม่จับคู่ | บันทึกตำแหน่งและเปิดใบแรก | PICK_SECOND |
 | PICK_SECOND | KEY1 บนใบอื่นที่ยังไม่จับคู่ | เปิดใบที่สอง, เพิ่ม attempts, เริ่มจับเวลา | REVEAL |
 | PICK_FIRST / PICK_SECOND | KEY1 บนใบที่เลือกไม่ได้ | ไม่มีผล รวมถึงไม่เลื่อนหาก KEY0 มาพร้อมกัน | เดิม |
-| PICK_FIRST / PICK_SECOND | KEY0 และไม่มี KEY1 | เลื่อนเคอร์เซอร์ วน 15 → 0 | เดิม |
+| PICK_FIRST / PICK_SECOND | KEY0 และไม่มี KEY1 | เลื่อนเคอร์เซอร์ วน 15 → 0 (SW8=1: ถอยหลัง วน 0 → 15) | เดิม |
 | REVEAL | ยังไม่ครบ 1 วินาที | เปิดสองใบค้าง | REVEAL |
 | REVEAL | ครบ 1 วินาที | รอรอบตรวจผล | CHECK |
 | CHECK | ถูกและยังไม่ครบ 8 คู่ | mark matched, เพิ่มคะแนน, ไม่สลับตา | PICK_FIRST |
@@ -76,7 +76,7 @@ CHECK ใช้หนึ่ง clock จึงเพิ่มคะแนนเ�
 - `two_players`, `player`: โหมดและเจ้าของตา (0 คือ P1)
 - `score1`, `score2`, `pairs`: 0–8 และ `attempts`: 0–999
 
-`input_controller` ส่งเหตุการณ์หนึ่ง clock ของ `next_press` และ `open_press` ปุ่ม active-low ผ่าน flip-flop สองขั้นและ debounce ทั้งกด/ปล่อย ส่วน SW0 ผ่านสองขั้น SW9 assert reset แบบ asynchronous และ release ผ่านสองขั้น; game_core รับ reset แบบ synchronous ที่ clock ถัดไป
+`input_controller` ส่งเหตุการณ์หนึ่ง clock ของ `next_press` และ `open_press` ปุ่ม active-low ผ่าน flip-flop สองขั้นและ debounce ทั้งกด/ปล่อย ส่วน SW0 และ SW8 ผ่านสองขั้น SW9 assert reset แบบ asynchronous และ release ผ่านสองขั้น; game_core รับ reset แบบ synchronous ที่ clock ถัดไป
 
 ระหว่างเปิดใบแรกและใบที่สอง การเปิดหน้าการ์ดคำนวณจาก state/ตำแหน่งและ matched mask ไม่แก้ค่าการ์ดใน deck
 

@@ -7,11 +7,11 @@ entity tb_game_core is end;
 architecture test of tb_game_core is
   constant HOLD_CYCLES : positive := 8;
   signal clk : std_logic := '0';
-  signal rst, move_key, open_key, mode : std_logic := '0';
+  signal rst, move_key, open_key, mode, reverse : std_logic := '0';
   signal g : view_t;
 begin
   clk <= not clk after 10 ns;
-  dut : entity work.game_core generic map(HOLD_CYCLES) port map(clk,rst,move_key,open_key,mode,g);
+  dut : entity work.game_core generic map(HOLD_CYCLES) port map(clk,rst,move_key,open_key,mode,g,reverse);
   process
     type histogram_t is array(0 to 7) of natural;
     type coverage_t is array(state_t) of boolean;
@@ -111,6 +111,16 @@ begin
     assert varied report "Different start times never changed the deck" severity failure;
     go_to(15); move_key <= '1'; tick; move_key <= '0'; tick;
     assert g.cursor = 0 report "Cursor did not wrap" severity failure;
+    -- SW8 reverses KEY0: 0 wraps to 15, then steps down to 14.
+    reverse <= '1';
+    move_key <= '1'; tick; move_key <= '0'; tick;
+    assert g.cursor = 15 report "Reverse cursor did not wrap" severity failure;
+    move_key <= '1'; tick; move_key <= '0'; tick;
+    assert g.cursor = 14 report "Reverse cursor did not step left" severity failure;
+    reverse <= '0';
+    move_key <= '1'; tick; move_key <= '0'; tick;
+    move_key <= '1'; tick; move_key <= '0'; tick;
+    assert g.cursor = 0 report "Forward cursor did not resume" severity failure;
     move_key <= '1'; open_key <= '1'; tick; move_key <= '0'; open_key <= '0'; tick;
     assert g.state = PICK_SECOND and g.first_card = 0 and g.cursor = 0
       report "Open did not take priority" severity failure;

@@ -7,7 +7,9 @@ entity game_core is
   generic (REVEAL_CYCLES : positive := 50_000_000);
   port (
     clk, reset_game, next_press, open_press, mode_sync : in std_logic;
-    game : out view_t
+    game : out view_t;
+    -- Live (not latched per game): '1' moves the cursor 15 -> 0, wrapping 0 -> 15.
+    reverse_sync : in std_logic := '0'
   );
 end;
 
@@ -81,7 +83,10 @@ begin
                 end if;
               end if;
             elsif next_press = '1' then
-              if v.cursor = 15 then v.cursor <= 0;
+              if reverse_sync = '1' then
+                if v.cursor = 0 then v.cursor <= 15;
+                else v.cursor <= v.cursor-1; end if;
+              elsif v.cursor = 15 then v.cursor <= 0;
               else v.cursor <= v.cursor+1; end if;
             end if;
           when REVEAL =>

@@ -7,13 +7,17 @@ entity input_controller is
     clk : in std_logic;
     key_n : in std_logic_vector(1 downto 0);
     mode_switch, reset_switch : in std_logic;
-    next_press, open_press, mode_sync, reset_game : out std_logic
+    next_press, open_press, mode_sync, reset_game : out std_logic;
+    -- SW8: '1' makes KEY0 step right-to-left. Trailing default keeps old maps valid.
+    reverse_switch : in std_logic := '0';
+    reverse_sync : out std_logic
   );
 end;
 
 architecture rtl of input_controller is
   signal key_meta, key_sync, stable : std_logic_vector(1 downto 0) := "11";
   signal mode_meta, mode_reg : std_logic := '0';
+  signal reverse_meta, reverse_reg : std_logic := '0';
   -- Asynchronous assertion, two-clock synchronous reset release. Initial high
   -- also gives all modules a deterministic power-on reset after configuration.
   signal reset_pipe : std_logic_vector(1 downto 0) := "11";
@@ -31,6 +35,7 @@ begin
   end process;
   reset_game <= reset_pipe(1);
   mode_sync <= mode_reg;
+  reverse_sync <= reverse_reg;
   next_press <= pulses(0);
   open_press <= pulses(1);
 
@@ -41,6 +46,8 @@ begin
       key_sync <= key_meta;
       mode_meta <= mode_switch;
       mode_reg <= mode_meta;
+      reverse_meta <= reverse_switch;
+      reverse_reg <= reverse_meta;
       pulses <= "00";
       if reset_pipe(1) = '1' then
         stable <= "11";

@@ -18,7 +18,7 @@ architecture rtl of renderer is
   type palette_t is array(0 to 7) of rgb_t;
   constant PALETTE : palette_t := (x"B34", x"276", x"258", x"735", x"853", x"368", x"647", x"567");
   constant TITLE : string := "MEMORY MATCH";
-  constant CONTROLS : string := "KEY0 NEXT   KEY1 OPEN   SW9 RESET";
+  constant CONTROLS : string := "KEY0 NEXT  KEY1 OPEN  SW8 DIR  SW9 RESET";
   signal glyph_d, glyph_q : character := ' ';
   signal gx_d, gx_q, gy_d, gy_q : natural range 0 to 7 := 0;
   signal color_d, color_q, ink_d, ink_q : rgb_t := x"000";

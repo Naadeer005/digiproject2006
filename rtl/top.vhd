@@ -17,7 +17,7 @@ entity top is
 end;
 
 architecture rtl of top is
-  signal next_press, open_press, mode_sync, reset_game : std_logic;
+  signal next_press, open_press, mode_sync, reset_game, reverse_sync : std_logic;
   signal pixel_ce, active, hs, vs, capture : std_logic;
   signal x : natural range 0 to 799;
   signal y : natural range 0 to 524;
@@ -27,10 +27,10 @@ architecture rtl of top is
 begin
   inputs : entity work.input_controller
     generic map (DEBOUNCE_CYCLES => DEBOUNCE_CYCLES)
-    port map (MAX10_CLK1_50, KEY, SW(0), SW(9), next_press, open_press, mode_sync, reset_game);
+    port map (MAX10_CLK1_50, KEY, SW(0), SW(9), next_press, open_press, mode_sync, reset_game, SW(8), reverse_sync);
   core : entity work.game_core
     generic map (REVEAL_CYCLES => REVEAL_CYCLES)
-    port map (MAX10_CLK1_50, reset_game, next_press, open_press, mode_sync, live_game);
+    port map (MAX10_CLK1_50, reset_game, next_press, open_press, mode_sync, live_game, reverse_sync);
   -- Keep sync running while SW9 is held. FPGA register initial values start
   -- the raster at (0,0); game reset never tears or stops the VGA signal.
   timing : entity work.vga_timing
